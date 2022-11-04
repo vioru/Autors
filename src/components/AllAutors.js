@@ -36,6 +36,7 @@ const AllAutors = () => {
                     <tr>
                         <th>Nombre</th>
                         <th>Imagen</th>
+                        <th>Frase celebre</th>
                         <th>Libros</th>
                         <th>Cuentos</th>
                         <th>Artículos</th>
@@ -50,6 +51,7 @@ const AllAutors = () => {
                                 <td>
                                     <img src={autor.imagen} alt="autor" className="img-fluid"  width="200px"/>
                                 </td>
+                                <td>{autor.cita}</td>
                                 <td>
                                     {
                                         autor.libros ? <span className="bi bi-check text-success"></span> : <span className="bi bi-x text-danger"></span>
