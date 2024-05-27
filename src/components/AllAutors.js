@@ -1,17 +1,35 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
-import {Link} from "react-router-dom";
+import {Link, useHistory} from "react-router-dom";
 
 const AllAutors = () => {
 
     const [autores, setAutores] = useState([]);
     console.log(autores);
+    
+
+    const history = useHistory()
 
     useEffect(() => {
-        axios.get("http://localhost:8000/api/autors")
+        axios.get("http://localhost:8000/api/autors", {withCredentials: true})
             .then(res => setAutores(res.data))
-            .catch(err => console.log(err));
-    }, [])
+            .catch(err => {
+                if(err.response.status === 401) {
+                    history.push('/login');
+                }
+            });
+    }, [history])
+
+    const userInSession =()=>{
+        axios.get("http://localhost:8000/api/user", {withCredentials: true})
+        .then(res => setAutores(res.data))
+        .catch(err => {
+            if(err.response.status === 401) {
+                history.push('/login');
+            }
+        });
+
+    }
 
 
     const DeleteAutor = id => {
@@ -25,11 +43,19 @@ const AllAutors = () => {
     }
 
 
+    const cerrarSesion = () => {
+        axios.get('http://localhost:8000/api/logout', {withCredentials:true})
+            .then(res => history.push('/login'))
+            .catch(err => console.log(err));
+    }
+
+
 
     return (
         <div>
             <h1>Autores</h1>
             <Link to="/new" className="btn btn-success">Nuevo Autor</Link>
+            <button className="btn btn-danger float-right" onClick={cerrarSesion}>Cerrar Sesión</button>
             
             <table className="table table-hover">
                 <thead>
